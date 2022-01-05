@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <th>
+                    <input v-model="searchbar">
+                    <button v-on:click="addPrice">Add</button>
+                </th>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <th>Count</th>
+                <th>Product</th>
+            </tr>
+            <tr v-for="row in visibleRows">
+                <td>{{ formatMoney(row.price) }}</td>
+                <td>{{ row.count }}
+                    <button v-on:click="increment(row.price)">++</button>
+                    <button v-on:click="incrementBy(row.price)">Inc...</button>
+                </td>
+                <td>{{ formatMoney(row.price * row.count) }}</td>
+            </tr>
+            <tr>
+                <td>Total (including invisible)</td>
+                <td></td>
+                <td>{{ formatMoney(total) }}</td>
+            </tr>
+        </table>
+
+        <div id="incrementModal" class="modal" v-if="inc.show">
+            Increment {{ inc.price }} by <input v-model="inc.amount"> <button v-on:click="incrementByActual(inc.price)">OK</button>
+        </div>
+
+    </div>
+</body>
+
+<script src="main.js"></script>
+
+</html>
