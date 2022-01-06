@@ -95,10 +95,15 @@ var app = new Vue({
             await this.updateRows();
             this.inc.show = false;
         },
+        async setTo(price, amount) {
+            await this.setItemInDb(price, amount);
+            await this.updateRows();
+        },
         async deleteItem(price) {
             await this.deleteItemFromDb(price);
             await this.updateRows();
         },
+
 
         // DB STUFF, mostl from https://www.raymondcamden.com/2019/10/16/using-indexeddb-with-vuejs
         async addItemToDb(item) {
@@ -126,6 +131,23 @@ var app = new Vue({
                 itemrq.onsuccess = function() {
                     var item = itemrq.result;
                     item.count += amount;
+                    store.put(item);
+                };
+
+            });
+        },
+        async setItemInDb(price, amount) {
+            return new Promise((resolve, reject) => {
+                let trans = this.db.transaction(this.activedb, 'readwrite');
+                trans.oncomplete = e => {
+                    resolve();
+                };
+
+                let store = trans.objectStore(this.activedb);
+                let itemrq = store.get(price);
+                itemrq.onsuccess = function() {
+                    var item = itemrq.result;
+                    item.count = amount;
                     store.put(item);
                 };
 

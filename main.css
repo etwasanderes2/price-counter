@@ -16,3 +16,85 @@
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
 }
+
+
+/* Modal Content/Box */
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+}
+
+button {
+    height: 2em;
+    border: 0px;
+}
+
+button:hover {
+    background-color: violet;
+}
+
+.b-inc {
+    background-color: aqua;
+}
+
+.b-add {
+    background-color: lightyellow;
+}
+
+.b-incby {
+    background-color: aquamarine;
+}
+
+.b-dec {
+    background-color: lightsalmon;
+}
+
+.b-zero {
+    background-color: lightcoral;
+}
+
+.b-del {
+    background-color: maroon;
+    color: white;
+}
+
+.pricecol {
+    text-align: right;
+    padding-right: 1em;
+    width: 80px;
+}
+
+.productcol {
+    width: 60px;
+    text-align: right;
+}
+
+.count {
+    text-align: right;
+    width: 60px;
+    padding-right: 1em;
+    display: inline-block;
+}
+
+html {
+    font: sans-serif;
+}
+
+tr:nth-child(even) {
+    background-color: lightgray;
+}
+
+.totalrow {
+    background-color: lightyellow !important;
+}
+
+.table-container {
+    overflow: auto;
+    height: 90vh;
+}

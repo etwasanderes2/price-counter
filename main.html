@@ -15,35 +15,41 @@
     <div id="app">
         <form action="#">
             <input v-model="searchbar" ref="sb">
-            <button v-on:click="addPrice">{{ exactMatch ? 'Increment' : 'Add' }}</button>
+            <button v-bind:class="{'b-add': !exactMatch, 'b-inc': exactMatch}" v-on:click="addPrice">{{ exactMatch ? 'Increment' : 'Add' }}</button>
         </form>
-        <table>
-            <tr>
-                <th>Price</th>
-                <th>Count</th>
-                <th>Product</th>
-            </tr>
-            <tr v-for="row in visibleRows">
-                <td>{{ formatMoney(row.price) }}</td>
-                <td>{{ row.count }}
-                    <button v-on:click="increment(row.price, 1)">++</button>
-                    <button v-on:click="incrementBy(row.price)">Increment by...</button>
-                    <button v-on:click="increment(row.price, -1)">--</button>
-                    <button v-on:click="deleteItem(row.price)">Delete</button>
-                </td>
-                <td>{{ formatMoney(row.price * row.count) }}</td>
-            </tr>
-            <tr>
-                <td>Total (including invisible)</td>
-                <td></td>
-                <td>{{ formatMoney(total) }}</td>
-            </tr>
-        </table>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Price</th>
+                    <th>Count</th>
+                    <th>Product</th>
+                </tr>
+                <tr v-for="row in visibleRows">
+                    <td class="pricecol">{{ formatMoney(row.price) }}</td>
+                    <td class="countrow">
+                        <div class="count">{{ row.count }}</div>
+                        <button class="b-inc" v-on:click="increment(row.price, 1)">++</button>
+                        <button class="b-incby" v-on:click="incrementBy(row.price)">Increment by...</button>
+                        <button class="b-dec" v-on:click="increment(row.price, -1)">--</button>
+                        <button class="b-zero" v-on:click="setTo(row.price, 0)">Zero</button>
+                        <button class="b-del" v-on:click="deleteItem(row.price)">Delete</button>
+                    </td>
+                    <td class="productcol">{{ formatMoney(row.price * row.count) }}</td>
+                </tr>
+                <tr class="totalrow">
+                    <td>Total (including invisible):</td>
+                    <td></td>
+                    <td class="productcol">{{ formatMoney(total) }}</td>
+                </tr>
+            </table>
+        </div>
 
         <div id="incrementModal" class="modal" v-show="inc.show">
-            <form action="">
-                Increment {{ formatMoney(inc.price) }} <input v-model="inc.amount" type="number" ref="incInp" action="#"> times <button v-on:click="incrementByActual(inc.price)">OK</button>
-            </form>
+            <div class="modal-content">
+                <form action="">
+                    Increment {{ formatMoney(inc.price) }} <input v-model="inc.amount" type="number" ref="incInp" action="#"> times <button v-on:click="incrementByActual(inc.price)">OK</button>
+                </form>
+            </div>
         </div>
 
     </div>
