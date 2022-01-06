@@ -110,6 +110,13 @@ var app = new Vue({
             await this.clearDb();
             await this.updateRows();
         },
+        async exportJson() {
+            navigator.clipboard.writeText(JSON.stringify(this.rows)).then(function() {
+                console.log("Copy Clipboard OK");
+            }, function() {
+                console.error("Copy Clipboard FAILED");
+            });
+        },
 
 
         // DB STUFF, mostl from https://www.raymondcamden.com/2019/10/16/using-indexeddb-with-vuejs
