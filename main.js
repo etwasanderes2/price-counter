@@ -104,6 +104,12 @@ var app = new Vue({
             await this.deleteItemFromDb(price);
             await this.updateRows();
         },
+        async clearAll() {
+            // we won't log all db access and just log this
+            console.info("Clear Table: " + JSON.stringify(this.rows));
+            await this.clearDb();
+            await this.updateRows();
+        },
 
 
         // DB STUFF, mostl from https://www.raymondcamden.com/2019/10/16/using-indexeddb-with-vuejs
@@ -172,6 +178,18 @@ var app = new Vue({
                     console.info("Deleted " + itemrq.result.price + " was " + itemrq.result.count);
                 }
             });
+        },
+        async clearDb() {
+            return new Promise((resolve, reject) => {
+                let trans = this.db.transaction(this.activedb, 'readwrite');
+                trans.oncomplete = e => {
+                    resolve();
+                };
+
+                let store = trans.objectStore(this.activedb);
+                store.delete(IDBKeyRange.lowerBound(0));
+                console.info("Cleared DB");
+            })
         },
         async getItemsFromDb() {
             return new Promise((resolve, reject) => {
