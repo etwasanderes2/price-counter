@@ -45,6 +45,13 @@ var app = new Vue({
     async created() {
         this.db = await this.getDb();
         this.updateRows();
+        window.addEventListener('keyup', (e) => {
+            if (e.target.id == 'body' && e.key == 'l') {
+                let sb = this.$refs.sb;
+                sb.focus();
+                sb.select();
+            }
+        })
     },
     methods: {
         // helpers
@@ -116,6 +123,10 @@ var app = new Vue({
             }, function() {
                 console.error("Copy Clipboard FAILED");
             });
+        },
+        focusSearch() {
+            console.log("focus search");
+            this.$refs.sb.focus();
         },
 
 

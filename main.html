@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="main.css">
 </head>
 
-<body>
+<body id="body">
     <div id="app">
         <form action="#">
-            <input v-model="searchbar" ref="sb">
+            <input v-model="searchbar" ref="sb" id="sb" placeholder="Search / New">
             <button v-bind:class="{'b-add': !exactMatch, 'b-inc': exactMatch}" v-on:click="addPrice">{{ exactMatch ? 'Increment' : 'Add' }}</button>
         </form>
         <div class="table-container">
