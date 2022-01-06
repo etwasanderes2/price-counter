@@ -56,11 +56,12 @@ var app = new Vue({
         },
         // UI Stuff
         async updateRows() {
-            console.log("upate rows")
+            // console.log("upate rows")
+            // hope that indexeddb is sorted
             this.rows = await this.getItemsFromDb();
         },
         async addPrice() {
-            console.log("add Price")
+            // console.log("add Price")
             let price = this.searchParsed
             if (isNaN(price)) {
                 console.warn("Bad number")
@@ -116,7 +117,7 @@ var app = new Vue({
 
                 let store = trans.objectStore(this.activedb);
                 store.add(item);
-
+                console.info("Added item " + item.price + " at " + item.count);
             });
         },
         async incrementItemInDb(price, amount) {
@@ -130,8 +131,10 @@ var app = new Vue({
                 let itemrq = store.get(price);
                 itemrq.onsuccess = function() {
                     var item = itemrq.result;
+                    var oldcount = item.count
                     item.count += amount;
                     store.put(item);
+                    console.info("Incremented " + item.price + " from " + oldcount + " to " + item.count + " (by " + amount + ")");
                 };
 
             });
@@ -147,8 +150,10 @@ var app = new Vue({
                 let itemrq = store.get(price);
                 itemrq.onsuccess = function() {
                     var item = itemrq.result;
+                    var oldcount = item.count
                     item.count = amount;
                     store.put(item);
+                    console.info("Set " + item.price + " from " + oldcount + " to " + item.count);
                 };
 
             });
@@ -161,7 +166,11 @@ var app = new Vue({
                 };
 
                 let store = trans.objectStore(this.activedb);
-                let itemrq = store.delete(price);
+                let itemrq = store.get(price);
+                itemrq.onsuccess = function() {
+                    store.delete(price);
+                    console.info("Deleted " + itemrq.result.price + " was " + itemrq.result.count);
+                }
             });
         },
         async getItemsFromDb() {
