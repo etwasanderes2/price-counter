@@ -46,7 +46,8 @@ var app = new Vue({
         this.db = await this.getDb();
         this.updateRows();
         window.addEventListener('keyup', (e) => {
-            if (e.target.id == 'body' && e.key == 'l') {
+            // console.log(e);
+            if (e.key == 'l' && !e.target.classList.contains('keycapture')) {
                 let sb = this.$refs.sb;
                 sb.focus();
                 sb.select();

@@ -14,7 +14,7 @@
 <body id="body">
     <div id="app">
         <form action="#">
-            <input v-model="searchbar" ref="sb" id="sb" placeholder="Search / New">
+            <input v-model="searchbar" ref="sb" id="sb" class="keycapture" placeholder="Search / New (L)">
             <button v-bind:class="{'b-add': !exactMatch, 'b-inc': exactMatch}" v-on:click="addPrice">{{ exactMatch ? 'Increment' : 'Add' }}</button>
         </form>
         <div class="table-container">
@@ -47,7 +47,7 @@
         <div id="incrementModal" class="modal" v-show="inc.show">
             <div class="modal-content">
                 <form action="">
-                    Increment {{ formatMoney(inc.price) }} <input v-model="inc.amount" type="number" ref="incInp" action="#"> times <button v-on:click="incrementByActual(inc.price)">OK</button>
+                    Increment {{ formatMoney(inc.price) }} <input v-model="inc.amount" type="number" ref="incInp" action="#" class="keycapture"> times <button v-on:click="incrementByActual(inc.price)">OK</button>
                 </form>
             </div>
         </div>
