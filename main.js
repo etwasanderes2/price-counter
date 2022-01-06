@@ -16,10 +16,24 @@ var app = new Vue({
         }
     },
     computed: {
+        searchParsed() {
+            return this.parseMoney(this.searchbar);
+        },
         visibleRows() {
             return this.rows.filter(item =>
                 this.formatMoney(item.price).includes(this.searchbar)
             );
+        },
+        exactMatch() {
+            if (isNaN(this.searchParsed)) {
+                return false;
+            }
+            for (r of this.rows) {
+                if (r.price === this.searchParsed) {
+                    return true;
+                }
+            }
+            return false;
         },
         total() {
             return this.rows.reduce(
@@ -38,7 +52,7 @@ var app = new Vue({
             return (money / 100).toFixed(2);
         },
         parseMoney(str) {
-            return parseFloat(str) * 100;
+            return Math.round(parseFloat(str) * 100);
         },
         // UI Stuff
         async updateRows() {
@@ -47,18 +61,22 @@ var app = new Vue({
         },
         async addPrice() {
             console.log("add Price")
-            let price = this.parseMoney(this.searchbar)
+            let price = this.searchParsed
             if (isNaN(price)) {
                 console.warn("Bad number")
                 return;
             }
-            let item = {
-                price: price,
-                count: 0
+            if (this.exactMatch) {
+                await this.incrementItemInDb(price, 1);
+                await this.updateRows();
+            } else {
+                let item = {
+                    price: price,
+                    count: 0
+                }
+                await this.addItemToDb(item);
+                await this.updateRows()
             }
-            await this.addItemToDb(item);
-            await this.updateRows();
-            this.searchbar = '';
         },
         async increment(price, amount) {
             await this.incrementItemInDb(price, amount);
@@ -66,8 +84,11 @@ var app = new Vue({
         },
         async incrementBy(price) {
             this.inc.price = price;
-            this.inc.amount = '0';
+            this.inc.amount = '';
             this.inc.show = true;
+            this.$nextTick(() => {
+                this.$refs.incInp.focus();
+            })
         },
         async incrementByActual(price) {
             await this.incrementItemInDb(price, parseInt(this.inc.amount));
