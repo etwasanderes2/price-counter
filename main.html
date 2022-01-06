@@ -28,8 +28,10 @@
             <tr v-for="row in visibleRows">
                 <td>{{ formatMoney(row.price) }}</td>
                 <td>{{ row.count }}
-                    <button v-on:click="increment(row.price)">++</button>
-                    <button v-on:click="incrementBy(row.price)">Inc...</button>
+                    <button v-on:click="increment(row.price, 1)">++</button>
+                    <button v-on:click="incrementBy(row.price)">Increment by...</button>
+                    <button v-on:click="increment(row.price, -1)">--</button>
+                    <button v-on:click="deleteItem(row.price)">Delete</button>
                 </td>
                 <td>{{ formatMoney(row.price * row.count) }}</td>
             </tr>
@@ -41,7 +43,7 @@
         </table>
 
         <div id="incrementModal" class="modal" v-if="inc.show">
-            Increment {{ inc.price }} by <input v-model="inc.amount"> <button v-on:click="incrementByActual(inc.price)">OK</button>
+            Increment {{ inc.price }} by <input v-model="inc.amount" type="number"> <button v-on:click="incrementByActual(inc.price)">OK</button>
         </div>
 
     </div>

@@ -48,6 +48,10 @@ var app = new Vue({
         async addPrice() {
             console.log("add Price")
             let price = this.parseMoney(this.searchbar)
+            if (isNaN(price)) {
+                console.warn("Bad number")
+                return;
+            }
             let item = {
                 price: price,
                 count: 0
@@ -56,19 +60,23 @@ var app = new Vue({
             await this.updateRows();
             this.searchbar = '';
         },
-        async increment(price) {
-            await this.incrementItemInDb(price, 1);
+        async increment(price, amount) {
+            await this.incrementItemInDb(price, amount);
             await this.updateRows();
         },
         async incrementBy(price) {
             this.inc.price = price;
-            this.inc.amount = '';
+            this.inc.amount = '0';
             this.inc.show = true;
         },
         async incrementByActual(price) {
             await this.incrementItemInDb(price, parseInt(this.inc.amount));
             await this.updateRows();
             this.inc.show = false;
+        },
+        async deleteItem(price) {
+            await this.deleteItemFromDb(price);
+            await this.updateRows();
         },
 
         // DB STUFF, mostl from https://www.raymondcamden.com/2019/10/16/using-indexeddb-with-vuejs
@@ -100,6 +108,17 @@ var app = new Vue({
                     store.put(item);
                 };
 
+            });
+        },
+        async deleteItemFromDb(price) {
+            return new Promise((resolve, reject) => {
+                let trans = this.db.transaction(this.activedb, 'readwrite');
+                trans.oncomplete = e => {
+                    resolve();
+                };
+
+                let store = trans.objectStore(this.activedb);
+                let itemrq = store.delete(price);
             });
         },
         async getItemsFromDb() {
