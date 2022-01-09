@@ -21,7 +21,7 @@ var app = new Vue({
         },
         visibleRows() {
             return this.rows.filter(item =>
-                this.formatMoney(item.price).includes(this.searchbar)
+                this.formatMoney(item.price).includes(this.searchbar.replace(',', '.'))
             );
         },
         exactMatch() {
@@ -60,7 +60,7 @@ var app = new Vue({
             return (money / 100).toFixed(2);
         },
         parseMoney(str) {
-            return Math.round(parseFloat(str) * 100);
+            return Math.round(parseFloat(str.replace(',', '.')) * 100);
         },
         // UI Stuff
         async updateRows() {
